@@ -29,7 +29,13 @@ bookRouter.route('/')
 	bookRouter.route('/:bookId')
 		.get(function(req,res){
 		// var response = {hello:"this is an get api"};
-			res.json(req.book);
+			// res.json(req.book);
+
+			var returnBook = req.book.toJSON();
+			returnBook.links = {};
+			var newLink ='http://' + req.headers.host+'/api/books/?genre='+returnBook.genre;
+			returnBook.links.FilterByThisGenre=newLink;  //.replace('','%20');
+				res.json(returnBook);
 		
 		})
 		.put(function(req,res){

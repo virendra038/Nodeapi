@@ -11,14 +11,26 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 
-
-mongoose.connect('mongodb://booksapi:booksapi@ds023303.mlab.com:23303/booksapi',function(err){
+if(process.env.ENV == "Test")
+{
+	mongoose.connect('mongodb://booksapi:booksapi@ds023303.mlab.com:23303/booksapi',function(err){
 	if(err){
 		console.log(err);
 	}else{
 		console.log("connected to the database");
 	}
 });
+}
+else
+{
+	mongoose.connect('mongodb://booksapi:booksapi@ds023303.mlab.com:23303/booksapi',function(err){
+	if(err){
+		console.log(err);
+	}else{
+		console.log("connected to the database");
+	}
+});
+}
 
 var bookRouter = require('./routes/bookRoutes')(Book);
 
@@ -31,3 +43,6 @@ app.get('/',function(req,res){
 app.listen(port,function(){
 	console.log('Magic happens on port' + port);
 });
+
+
+module.exports = app;

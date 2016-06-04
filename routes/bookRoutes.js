@@ -1,32 +1,13 @@
 var express = require('express');
 
 var routes = function(Book){
-	var bookRouter = express.Router();
+var bookRouter = express.Router();
+
+var bookController = require('../controllers/bookController')(Book);
 
 bookRouter.route('/')
-	.post(function(req,res){
-		var book = new Book();
-		book.title = req.body.title;
-		book.author = req.body.author;
-		book.genre = req.body.genre;
-		book.save();
-		res.status(201).send(book);
-
-	})
-
-	.get(function(req,res){
-		// var response = {hello:"this is an get api"};
-		var query = {};
-		if(req.query.genre){
-			query.genre = req.query.genre;
-		} 		// for params
-		Book.find(query, function(err,books){
-			if(err)
-				res.status(500).send(err);
-			else
-				res.json(books);
-		});
-	});
+	.post(bookController.post)
+	.get(bookController.get);
 
 	bookRouter.use('/:bookId',function(req,res,next){
 		Book.findById(req.params.bookId, function(err,book){
